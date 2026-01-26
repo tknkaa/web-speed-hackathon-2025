@@ -9,7 +9,7 @@ import { createStore } from '@wsh-2025/client/src/app/createStore';
 import type { FastifyInstance } from 'fastify';
 import { createStandardRequest } from 'fastify-standard-request-reply';
 import htmlescape from 'htmlescape';
-import { StrictMode } from 'react';
+import React, { StrictMode } from 'react';
 import { renderToString } from 'react-dom/server';
 import { createStaticHandler, createStaticRouter, StaticRouterProvider } from 'react-router';
 
