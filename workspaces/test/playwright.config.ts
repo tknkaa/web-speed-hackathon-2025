@@ -15,7 +15,13 @@ export default defineConfig({
     {
       name: 'Desktop Chrome',
       testMatch: '**/src/**/*.test.ts',
-      use: { ...devices['Desktop Chrome'], channel: 'chrome' }, // chromiumはh264に対応していないためChromeを使用
+      use: {
+        ...devices['Desktop Chrome'],
+        channel: 'chrome', // chromiumはh264に対応していないためChromeを使用
+        launchOptions: {
+          executablePath: process.env['PLAYWRIGHT_LAUNCH_OPTIONS_EXECUTABLE_PATH'],
+        },
+      },
     },
   ],
   reporter: 'list',

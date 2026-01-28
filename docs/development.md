@@ -49,6 +49,7 @@ Playwright で Visual Regression Test (VRT) を提供しています。
 ### 使い方
 
 1. Playwright 用の Chromium をインストールします
+   - Nix flake を使用している場合は、Chromium が自動的に提供されるため、このステップは不要です
    - ```bash
      pnpm --filter "@wsh-2025/test" exec playwright install chromium
      ```

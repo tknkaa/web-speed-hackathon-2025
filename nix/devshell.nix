@@ -1,16 +1,15 @@
 { pkgs }:
+let
+  browsers = (builtins.fromJSON (builtins.readFile "${pkgs.playwright-driver}/browsers.json")).browsers;
+  chromium-rev = (builtins.head (builtins.filter (x: x.name == "chromium") browsers)).revision;
+in
 pkgs.mkShell {
-  # Add build dependencies
   packages = with pkgs; [
     nodejs_22
-    pnpm_9
+    pnpm
+    playwright-driver.browsers
   ];
-
-  # Add environment variables
-  env = { };
-
-  # Load custom bash code
   shellHook = ''
-
+    export PLAYWRIGHT_LAUNCH_OPTIONS_EXECUTABLE_PATH="${pkgs.playwright-driver.browsers}/chromium-${chromium-rev}/chrome-linux64/chrome";
   '';
 }
