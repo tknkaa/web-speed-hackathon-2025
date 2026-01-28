@@ -7,7 +7,7 @@
     "heroku-cleanup": "wireit",
     "heroku-start": "wireit",
     "start": "wireit",
-    "test": "wireit",
+    "test": "pnpm --filter @wsh-2025/test exec playwright test --workers=2",
     "analyze": "xdg-open workspaces/client/dist/report.html"
   },
   "dependencies": {
