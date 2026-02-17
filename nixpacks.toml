@@ -1,4 +1,0 @@
-[ignore]
-paths = [
-  "workspaces/server/streams/**/+.ts"
-]
