@@ -1,5 +1,4 @@
 [ignore]
 paths = [
-  "workspaces/server/streams",
-  "workspaces/server/streams/*.ts"
+  "workspaces/server/streams/**/+.ts"
 ]
