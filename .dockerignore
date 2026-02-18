@@ -75,9 +75,8 @@ tmp/
 temp/
 *.tmp
 
-# Database files (local development)
-**/*.sqlite
-**/*.sqlite-*
+# Database files (local development only - production DB is pre-seeded and committed)
+# workspaces/server/database.sqlite is intentionally included for Docker builds
 
 # Nix files
 flake.lock
