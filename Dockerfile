@@ -3,26 +3,38 @@
 # Stage 1: Build stage
 FROM node:22.14.0-slim AS builder
 
-# Install pnpm
+# Install build dependencies
+RUN apt-get update && apt-get install -y \
+    python3 \
+    make \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
+
+# Enable corepack and install pnpm
 RUN corepack enable && corepack prepare pnpm@9.14.2 --activate
 
 WORKDIR /app
 
-# Copy package files
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+# Copy package manager config files first
 COPY .npmrc ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
-# Copy workspace package.json files
+# Copy all workspace package.json files
 COPY workspaces/client/package.json ./workspaces/client/
 COPY workspaces/configs/package.json ./workspaces/configs/
 COPY workspaces/schema/package.json ./workspaces/schema/
 COPY workspaces/server/package.json ./workspaces/server/
 
+# Copy patches directory (needed by pnpm)
+COPY patches ./patches
+
 # Install all dependencies (including dev dependencies for build)
 RUN pnpm install --frozen-lockfile
 
-# Copy source code and configuration files
-COPY . .
+# Copy all source code and configuration files
+COPY workspaces ./workspaces
+COPY public ./public
+COPY prettier.config.mjs ./
 
 # Build the client application
 RUN pnpm run build
@@ -34,7 +46,7 @@ RUN rm -rf ./node_modules ./workspaces/*/.wireit ./workspaces/test && \
 # Stage 2: Production stage
 FROM node:22.14.0-slim AS production
 
-# Install pnpm
+# Enable corepack and install pnpm
 RUN corepack enable && corepack prepare pnpm@9.14.2 --activate
 
 WORKDIR /app
