@@ -51,7 +51,7 @@ export function registerSsr(app: FastifyInstance): void {
     }
 
     const router = createStaticRouter(handler.dataRoutes, context);
-    renderToString(
+    const html = renderToString(
       <StrictMode>
         <StoreProvider createStore={() => store}>
           <StaticRouterProvider context={context} hydrate={false} router={router} />
@@ -59,7 +59,7 @@ export function registerSsr(app: FastifyInstance): void {
       </StrictMode>,
     );
 
-    const rootDir = path.resolve(__dirname, '../../../');
+    const rootDir = path.resolve(import.meta.dirname, '../../../');
     const imagePaths = [
       getFilePaths('public/images', rootDir),
       getFilePaths('public/animations', rootDir),
@@ -76,13 +76,13 @@ export function registerSsr(app: FastifyInstance): void {
           <script src="/public/main.js"></script>
           ${imagePaths.map((imagePath) => `<link as="image" href="${imagePath}" rel="preload" />`).join('\n')}
         </head>
-        <body></body>
+        <body>${html}</body>
       </html>
       <script>
         window.__staticRouterHydrationData = ${htmlescape({
-          actionData: context.actionData,
-          loaderData: context.loaderData,
-        })};
+      actionData: context.actionData,
+      loaderData: context.loaderData,
+    })};
       </script>
     `);
   });
