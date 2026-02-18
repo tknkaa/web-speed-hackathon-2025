@@ -28,6 +28,12 @@ RUN pnpm install --frozen-lockfile
 # Build the client application
 RUN pnpm run build
 
+# Generate and seed the SQLite database (required at runtime)
+WORKDIR /app/workspaces/server
+RUN npx drizzle-kit generate && npx drizzle-kit push
+RUN npx tsx ./tools/seed.ts
+WORKDIR /app
+
 # Clean up development dependencies and unnecessary files
 RUN rm -rf ./node_modules ./workspaces/*/.wireit ./workspaces/test && \
     pnpm install --prod --frozen-lockfile
