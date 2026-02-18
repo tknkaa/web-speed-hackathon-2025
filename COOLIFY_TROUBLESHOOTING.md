@@ -1,5 +1,35 @@
 # Coolify Deployment Troubleshooting
 
+## ⚠️ QUICK FIX: pnpm install --frozen-lockfile Failed
+
+**Error:** `process "/bin/sh -c pnpm install --frozen-lockfile" did not complete successfully: exit code: 1`
+
+### **Solution 1: Use the Updated Dockerfile (Recommended)**
+
+The main `Dockerfile` has been updated to copy workspace source files before `pnpm install`. This is needed because:
+- Your project uses workspace dependencies (`workspace:*`)
+- pnpm needs the source files of `@wsh-2025/configs` and `@wsh-2025/schema` to resolve dependencies
+- The patch for `shaka-player` must be available
+
+**Make sure you have the latest Dockerfile committed and pushed.**
+
+### **Solution 2: Use the Simple Dockerfile (If Still Failing)**
+
+If the main Dockerfile still fails, use the simpler version:
+
+```bash
+# Rename the simple Dockerfile
+mv Dockerfile Dockerfile.optimized
+mv Dockerfile.simple Dockerfile
+
+# Commit and push
+git add Dockerfile
+git commit -m "Use simplified Dockerfile"
+git push
+```
+
+The simple Dockerfile copies all files at once, avoiding workspace resolution issues (at the cost of slightly slower builds).
+
 ## Common Issues and Solutions
 
 ### Issue 1: "Command execution failed (exit code 1)"
