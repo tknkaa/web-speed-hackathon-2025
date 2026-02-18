@@ -1,0 +1,7 @@
+# This file is automatically applied when running Docker Compose locally.
+# It adds localhost-only port binding for local development.
+# Do NOT commit secrets here. This file is safe to commit.
+services:
+  app:
+    ports:
+      - "127.0.0.1:8000:8000"
